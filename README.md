@@ -1,8 +1,14 @@
 # agenda
 
-## Running
+## Setup
 
 ```
-npm install
-DEBUG=myapp:* npm start
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Running
+```
+uvicorn main:app --reload
 ```
