@@ -10,13 +10,6 @@ router = APIRouter(
     tags=["auth"],
 )
 
-example_user = {"userId": "3109382391312327381278"}
-
-@router.post("")
-def auth():
-    return security_service.auth(example_user)
-
-
 @router.post("/refresh")
 def refresh(credentials: JwtAuthorizationCredentials = Security(security_service.refresh_security)):
     return security_service.refresh(credentials)

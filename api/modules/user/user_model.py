@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, TIMESTAMP
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
 import uuid
 from api.modules.db.db import Base
 
@@ -16,5 +17,5 @@ class User(Base):
     phone = Column(String, unique=True)
     bio = Column(String)
     image_url = Column(String)
-    created_at = Column(TIMESTAMP)
+    created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
 
