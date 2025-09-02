@@ -1,8 +1,3 @@
-# agenda
+# Agenda
 
-## Running
-
-```
-npm install
-DEBUG=myapp:* npm start
-```
+Projeto de agendamento de horários de clientes e psicólogos.

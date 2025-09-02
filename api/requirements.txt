@@ -1,0 +1,5 @@
+fastapi~=0.116.1
+fastapi-jwt[authlib]
+uvicorn
+bcrypt
+passlib
