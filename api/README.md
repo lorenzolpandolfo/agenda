@@ -20,7 +20,7 @@ pip install -r requirements.txt
 ## Iniciando API
 acesse o diretório raiz `/agenda` e execute
 ```bash
-uvicorn main:app --reload
+uvicorn api.main:app --reload
 ```
 
 ## Iniciando banco de dados
