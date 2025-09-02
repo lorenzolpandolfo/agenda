@@ -12,8 +12,6 @@ from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-MIN_SIZE_PASSWORD = 6
-
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -38,11 +36,6 @@ class UserService:
         return user
 
     def register(self, data: UserRequestRegister) -> User:
-        if len(data.password) < MIN_SIZE_PASSWORD:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid password size (must be at least {MIN_SIZE_PASSWORD})",
-            )
 
         user = User(
             email=data.email,

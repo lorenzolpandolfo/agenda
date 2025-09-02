@@ -17,7 +17,9 @@ class SecurityService:
             access_expires_delta=timedelta(hours=ACCESS_TOKEN_EXPIRE_HOURS),
         )
         self.refresh_security = JwtRefreshBearer(
-            secret_key="secret_key", auto_error=True
+            secret_key="secret_key",
+            auto_error=True,
+            access_expires_delta=timedelta(hours=REFRESH_TOKEN_EXPIRE_DAYS),
         )
 
     def auth(self, subject):

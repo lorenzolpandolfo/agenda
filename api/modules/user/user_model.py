@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, TIMESTAMP
+from sqlalchemy import Column, String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 import uuid
@@ -18,4 +18,4 @@ class User(Base):
     phone = Column(String, unique=True)
     bio = Column(String)
     image_url = Column(String)
-    created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

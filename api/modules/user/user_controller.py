@@ -1,5 +1,4 @@
-from fastapi import HTTPException, status, APIRouter, Security, Depends
-from fastapi_jwt import JwtAuthorizationCredentials
+from fastapi import HTTPException, status, APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from api.modules.db.db import get_db
@@ -22,7 +21,6 @@ router = APIRouter(
     tags=["user"],
 )
 
-
 @router.post("/login")
 async def login(
     data: UserRequestLogin, service: UserService = Depends(get_user_service)
@@ -35,7 +33,7 @@ async def login(
             detail="Invalid email or password",
         )
 
-    tokens = get_security_service().auth(subject={"id": str(user.id)})
+    tokens = get_security_service().auth(subject={"user_id": str(user.id)})
 
     return {
         "access_token": tokens["access_token"],
