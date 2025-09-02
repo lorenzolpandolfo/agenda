@@ -12,13 +12,16 @@ from api.modules.user.user_service import UserService
 def get_user_service(db: Session = Depends(get_db)):
     return UserService(db)
 
+
 def get_security_service():
     return SecurityService()
+
 
 router = APIRouter(
     prefix="/user",
     tags=["user"],
 )
+
 
 @router.post("/login")
 def login(data: UserRequestLogin, service: UserService = Depends(get_user_service)):
@@ -39,17 +42,14 @@ def login(data: UserRequestLogin, service: UserService = Depends(get_user_servic
         "user_id": user.id,
     }
 
+
 @router.post("/register")
-def register(data: UserRequestRegister, service: UserService = Depends(get_user_service)):
+def register(
+    data: UserRequestRegister, service: UserService = Depends(get_user_service)
+):
 
     user = service.register(data)
 
     return {
         "user_id": user.id,
     }
-
-
-
-@router.get("/me")
-def read_current_user(credentials: JwtAuthorizationCredentials = Security(lambda: get_security_service().access_security)):
-    return {"username": credentials}

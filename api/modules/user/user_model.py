@@ -4,6 +4,7 @@ from sqlalchemy.sql import func
 import uuid
 from api.modules.db.db import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -18,4 +19,3 @@ class User(Base):
     bio = Column(String)
     image_url = Column(String)
     created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
-
