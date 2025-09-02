@@ -1,10 +1,13 @@
 from datetime import datetime
 from pydantic import BaseModel, model_validator
 
+from api.modules.enum.enum_availability_status import AvailabilityStatus
 
-class AvailabilitiesRequestCreate(BaseModel):
+
+class AvailabilitiesCreateRequest(BaseModel):
     start_time: datetime
     end_time: datetime
+    status: AvailabilityStatus
 
     @model_validator(mode="after")
     def check_time_order(self):

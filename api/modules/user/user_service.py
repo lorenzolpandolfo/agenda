@@ -4,8 +4,8 @@ from sqlalchemy.exc import IntegrityError
 
 from api.modules.enum.enum_user_roles import UserRoles
 from api.modules.enum.enum_user_status import UserStatus
-from api.modules.user.request.user_request_login import UserRequestLogin
-from api.modules.user.request.user_request_register import UserRequestRegister
+from api.modules.user.request.user_login_request import UserLoginRequest
+from api.modules.user.request.user_register_request import UserRegisterRequest
 from api.modules.user.user_model import User
 from api.modules.user.user_repository import UserRepository
 from passlib.context import CryptContext
@@ -24,7 +24,7 @@ class UserService:
     def get_all_users(self):
         return self.repo.find_all()
 
-    def login(self, data: UserRequestLogin) -> User | None:
+    def login(self, data: UserLoginRequest) -> User | None:
         user = self.repo.find_by_email(data.email)
 
         if not user:
@@ -35,7 +35,7 @@ class UserService:
 
         return user
 
-    def register(self, data: UserRequestRegister) -> User:
+    def register(self, data: UserRegisterRequest) -> User:
 
         user = User(
             email=data.email,

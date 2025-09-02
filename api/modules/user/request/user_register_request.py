@@ -3,7 +3,7 @@ from pydantic import BaseModel, field_validator
 MIN_SIZE_PASSWORD = 6
 MIN_SIZE_EMAIL = 3
 
-class UserRequestRegister(BaseModel):
+class UserRegisterRequest(BaseModel):
     email: str
     password: str
     name: str

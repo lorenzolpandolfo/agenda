@@ -22,6 +22,7 @@ CREATE TABLE availabilities (
     start_time TIMESTAMP WITH TIME ZONE NOT NULL,
     end_time TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'ACTIVE', -- AVAILABLE / TAKEN / COMPLETED / CANCELED
     CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(owner_id, start_time, end_time)
 );
@@ -32,7 +33,6 @@ CREATE TABLE schedule (
     professional_id UUID NOT NULL,
     patient_id UUID NOT NULL,
     availability_id UUID NOT NULL,
-    status VARCHAR(50) DEFAULT 'ACTIVE', -- ACTIVE / COMPLETED / CANCELED
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_professional FOREIGN KEY(professional_id) REFERENCES users(id),
     CONSTRAINT fk_patient FOREIGN KEY(patient_id) REFERENCES users(id),

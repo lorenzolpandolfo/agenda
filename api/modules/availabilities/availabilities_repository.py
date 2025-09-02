@@ -15,8 +15,8 @@ class AvailabilitiesRepository:
     def find_all(self) -> list[Type[Availabilities]]:
         return self.__db.query(Availabilities).all()
 
-    def find_by_owner_id(self, owner_id) -> Availabilities | None:
-        return self.__db.query(Availabilities).filter(Availabilities.owner_id == owner_id).first()
+    def find_all_by_owner_id(self, owner_id) -> list[Type[Availabilities]] | None:
+        return self.__db.query(Availabilities).filter(Availabilities.owner_id == owner_id).all()
 
     def save(self, availability) -> Availabilities:
         self.__db.add(availability)

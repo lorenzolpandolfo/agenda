@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from api.modules.db.db import get_db
 from api.modules.security.security_service import SecurityService
-from api.modules.user.request.user_request_login import UserRequestLogin
-from api.modules.user.request.user_request_register import UserRequestRegister
+from api.modules.user.request.user_login_request import UserLoginRequest
+from api.modules.user.request.user_register_request import UserRegisterRequest
 from api.modules.user.user_service import UserService
 
 
@@ -23,7 +23,7 @@ router = APIRouter(
 
 @router.post("/login")
 async def login(
-    data: UserRequestLogin, service: UserService = Depends(get_user_service)
+    data: UserLoginRequest, service: UserService = Depends(get_user_service)
 ):
     user = service.login(data)
 
@@ -44,7 +44,7 @@ async def login(
 
 @router.post("/register")
 async def register(
-    data: UserRequestRegister, service: UserService = Depends(get_user_service)
+    data: UserRegisterRequest, service: UserService = Depends(get_user_service)
 ):
     user = service.register(data)
 

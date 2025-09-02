@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class UserRequestLogin(BaseModel):
+class UserLoginRequest(BaseModel):
     email: str
     password: str
