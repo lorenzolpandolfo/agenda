@@ -53,12 +53,3 @@ def register(
     return {
         "user_id": user.id,
     }
-
-
-@router.get("/me")
-def read_current_user(
-    credentials: JwtAuthorizationCredentials = Security(
-        lambda: get_security_service().access_security
-    ),
-):
-    return {"username": credentials}

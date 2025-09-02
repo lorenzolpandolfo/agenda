@@ -21,7 +21,6 @@ class SecurityService:
         )
 
     def auth(self, subject):
-        # após validar email e senha em user_service, o subject vai conter o id do usuário no banco
         access_token = self.access_security.create_access_token(subject=subject)
         refresh_token = self.refresh_security.create_refresh_token(subject=subject)
         return {"access_token": access_token, "refresh_token": refresh_token}
