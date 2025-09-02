@@ -12,7 +12,7 @@ router = APIRouter(
 
 
 @router.post("/refresh")
-def refresh(
+async def refresh(
     credentials: JwtAuthorizationCredentials = Security(
         security_service.refresh_security
     ),

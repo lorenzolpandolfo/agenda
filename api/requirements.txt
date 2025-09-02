@@ -4,3 +4,5 @@ uvicorn
 bcrypt
 passlib
 black
+sqlalchemy[asyncio]
+psycopg2-binary
