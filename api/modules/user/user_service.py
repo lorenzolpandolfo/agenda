@@ -14,8 +14,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 MIN_SIZE_PASSWORD = 6
 
+
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
+
 
 class UserService:
     def __init__(self, db: Session):
@@ -47,11 +49,15 @@ class UserService:
             password_hash=hash_password(data.password),
             name=data.name,
             role=str(UserRoles.PROFESSIONAL) if data.crp else str(UserRoles.PATIENT),
-            status=str(UserStatus.WAITING_VALIDATION) if data.crp else str(UserStatus.WAITING_VALIDATION),
+            status=(
+                str(UserStatus.WAITING_VALIDATION)
+                if data.crp
+                else str(UserStatus.WAITING_VALIDATION)
+            ),
             crp=data.crp if data.crp else None,
             phone=getattr(data, "phone", None),
             bio=getattr(data, "bio", None),
-            image_url=getattr(data, "image_url", None)
+            image_url=getattr(data, "image_url", None),
         )
 
         try:

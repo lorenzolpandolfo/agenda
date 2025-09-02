@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class UserRoles(Enum):
     PATIENT = 0
     PROFESSIONAL = 1

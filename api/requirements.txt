@@ -3,3 +3,4 @@ fastapi-jwt[authlib]
 uvicorn
 bcrypt
 passlib
+black
