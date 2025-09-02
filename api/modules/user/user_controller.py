@@ -24,13 +24,14 @@ router = APIRouter(
 
 
 @router.post("/login")
-def login(data: UserRequestLogin, service: UserService = Depends(get_user_service)):
-
+async def login(
+    data: UserRequestLogin, service: UserService = Depends(get_user_service)
+):
     user = service.login(data)
 
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid email or password",
         )
 
@@ -44,10 +45,9 @@ def login(data: UserRequestLogin, service: UserService = Depends(get_user_servic
 
 
 @router.post("/register")
-def register(
+async def register(
     data: UserRequestRegister, service: UserService = Depends(get_user_service)
 ):
-
     user = service.register(data)
 
     return {
