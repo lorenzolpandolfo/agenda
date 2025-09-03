@@ -1,0 +1,404 @@
+{
+	"info": {
+		"_postman_id": "f606a7b5-162a-46ab-be06-9fc1f3be2945",
+		"name": "API Agenda",
+		"description": "Para utilizar a API, inicie o projeto com o Python e o banco de dados com o Docker.\n\nEntão, verifique se a porta do servidor (por padrão `8000`) está correta. Caso necessário, altere a variável `api_url` nesta collection, no canto direito superior.\n\nRealize login na rota **POST Login** e obtenha o `access_token`. Defina-o na variável `auth_token` nesta coleção.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37212133"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijp7InVzZXJJZCI6IjMxMDkzODIzOTEzMTIzMjczODEyNzgifSwidHlwZSI6ImFjY2VzcyIsImV4cCI6MTc1Njc0ODc0MSwiaWF0IjoxNzU2NzQ1MTQxLCJqdGkiOiI2MWNmNzNmYS03MzQ2LTQ0YzAtYWM5ZS00N2YzMGU2YjJjNDUifQ.9TjvGTDN6YvoG2dY4fTi70Tq62X8B8YySBcAnNA86L4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"lorenzo@gmail.com\",\n    \"password\":\"123123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/user/login",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"lorenzo@gmail.com\",\n    \"password\": \"123123\",\n    \"name\": \"Lorenzo Pandolfo\",\n    // \"crp\":\"CRP/01-12345\",\n    \"bio\": \"Estudante de Programação\",\n    \"image_url\": \"link_para_imagem.jpeg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/user/register",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth refresh",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{api_url}}/auth/refresh",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"auth",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Availability register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"start_time\": \"2025-09-03T10:00:00Z\",\n    \"end_time\": \"2025-09-03T11:00:00Z\",\n    \"status\": \"AVAILABLE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/availabilities",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"availabilities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all availabilities from a user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/availabilities?professional_id=cc879044-17d2-43a0-bf6e-6b3f45fd13b9&time_filter=DAY",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"availabilities"
+					],
+					"query": [
+						{
+							"key": "professional_id",
+							"value": "cc879044-17d2-43a0-bf6e-6b3f45fd13b9"
+						},
+						{
+							"key": "time_filter",
+							"value": "DAY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify CRP",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/user/verify-crp?user_id=744e67e1-b833-4c26-b6e4-8bd277a6891c",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"user",
+						"verify-crp"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "744e67e1-b833-4c26-b6e4-8bd277a6891c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user data",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/user?user_id=f13ee927-601a-4b81-9def-e39b6dad5e45",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "f13ee927-601a-4b81-9def-e39b6dad5e45"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change availability status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"availability_id\": \"da6f3bd2-c535-4a4c-840b-e2492e9fcb38\",\n    \"status\": \"AVAILABLE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/availabilities/change-status",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"availabilities",
+						"change-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Schedule",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"availability_id\": \"b3dc128c-b626-467c-882c-071c2ffa8877\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/schedule",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"schedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get schedules",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}/schedule?time_filter=DAY",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"schedule"
+					],
+					"query": [
+						{
+							"key": "time_filter",
+							"value": "DAY"
+						},
+						{
+							"key": "time_filter",
+							"value": "WEEK",
+							"disabled": true
+						},
+						{
+							"key": "time_filter",
+							"value": "MONTH",
+							"disabled": true
+						},
+						{
+							"key": "time_filter",
+							"value": "ALL",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "auth_token",
+			"value": ""
+		},
+		{
+			"key": "api_url",
+			"value": "localhost:8000",
+			"type": "string"
+		}
+	]
+}

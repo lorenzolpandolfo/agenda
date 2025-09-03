@@ -1,0 +1,333 @@
+# Documentação API Agenda
+Abaixo segue a documentação da API, com cada endpoint, seus responses e dados no geral. Ao lado deste arquivo, está o `API AGENDA.postman_collection.json`, que é uma coleção do Postman que permite se comunicar com a API de forma rápida e fácil.
+
+---
+
+# User — Patient / Professional
+
+Um usuário pode ser do tipo ***PATIENT*** (paciente) ou ***PROFESSIONAL*** (psicólogo), conforme o atributo ***role***.
+
+Um usuário ***PROFESSIONAL***, ao se registrar, inicia com o valor ***WAITING_VALIDATION*** no atributo **status**. Após a validação do seu CRP por parte do Conselho de Psicologia, o seu status pode ser alterado para ***READY*,** permitindo o registro de horários livres (availabilities).
+
+---
+
+### **POST /user/register**
+
+Registra um novo usuário.
+
+Request:
+
+```json
+{
+    "email": "lorenzo@gmail.com",
+    "password": "123123",
+    "name": "Lorenzo Pandolfo",
+    // "crp":"CRP/01-12345",
+    "bio": "Estudante de Programação",
+    "image_url": "link_para_imagem.jpeg"
+}
+```
+
+Response **200**: ****
+
+```json
+{
+    "user_id": "f13ee927-601a-4b81-9def-e39b6dad5e45",
+    "name": "Lorenzo Pandolfo",
+    "bio": "Estudante de Programação",
+    "email": "lorenzo@gmail.com",
+    "role": "PATIENT",  // PROFESSIONAL caso tenha CRP
+    "status": "READY",  // WAITING_VALIDATION caso tenha CRP
+    "crp": null,        // caso CRP não seja especificado fica null
+    "image_url": "link_para_imagem.jpeg",
+    "created_at": "2025-09-03T00:15:42.600633+00:00"
+}
+```
+
+Validações:
+
+- não deve ter **CRP** e **email** repetidos
+- **email** deve conter somente um @ e ao menos 3 caracteres
+- senha deve ter ao menos 6 dígitos
+- CRP deve ter exatamente 12 dígitos (exemplo: `CRP/01-12345`)
+
+---
+
+### **POST /user/login**
+
+Realiza o login de um usuário com email e senha.
+
+Request:
+
+```json
+{
+	"email": "foo@mail.com"
+	"password": "senha123"
+}
+```
+
+Response **200**:
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user_data": {
+        "user_id": "f13ee927-601a-4b81-9def-e39b6dad5e45",
+        "name": "Lorenzo Pandolfo",
+        "bio": "Estudante de Programação",
+        "email": "lorenzo@gmail.com",
+        "role": "PATIENT",
+        "status": "READY",
+        "crp": null,
+        "image_url": "link_para_imagem.jpeg",
+        "created_at": "2025-09-03 00:15:42.600633+00:00"
+    }
+}
+```
+
+---
+
+### **GET /user?user_id=*123 (param. opcional)***
+
+Retorna informações básicas sobre usuário pelo id.
+
+Se o ***user_id*** não for especificado, retorna dados do **usuário autenticado**.
+
+Response **200**:
+
+```json
+{
+    "id": "f13ee927-601a-4b81-9def-e39b6dad5e45",
+    "name": "Lorenzo Pandolfo",
+    "email": "lorenzo@gmail.com",
+    "role": "PATIENT",
+    "status": "READY",
+    "crp": null,
+    "phone": null,
+    "bio": "Estudante de Programação",
+    "image_url": "link_para_imagem.jpeg",
+    "created_at": "2025-09-03T00:15:42.600633+00:00"
+}
+```
+
+---
+
+### GET /user/verify-crp?user_id=*123 (param. opcional)*
+
+Valida o CRP de um usuário ***PROFESSIONAL***, alterando no usuário o atributo **status** para ***READY***.
+
+Se o ***user_id*** não for especificado, realiza a ação para **o usuário autenticado**.
+
+*Este endpoint é apenas uma simulação do processo de validação realizado pelo Conselho de Psicologia.*
+
+Response **200**:
+
+```json
+{
+    "user_id": "3f4f15d1-a337-41b1-985d-677130b3bcb2",
+    "crp": "CRP/01-12340",
+    "status": "READY"
+}
+```
+
+Validações:
+
+- Usuário especificado deve ter role ***PROFESSIONAL***
+
+---
+
+# Auth
+
+### POST /auth/refresh
+
+Enviando um **refresh token** no **Auth Type Bearer Token** o endpoint retorna um novo access_token e refresh_token.
+
+Response **200**:
+
+```json
+{
+"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+"refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+---
+
+# Availabilities — horários disponíveis
+
+### **POST /availabilities**
+
+Registra um horário livre na agenda do usuário autenticado.
+
+Request:
+
+```json
+{
+    "start_time": "2025-09-04T15:00:00Z",
+    "end_time": "2025-09-04T16:00:00Z",
+    "status": "AVAILABLE" // AVAILABLE, TAKEN, COMPLETED, CANCELED
+}
+```
+
+*(atribui no servidor o owner_id ****com o id do usuário autenticado)*
+
+Response **200**:
+
+```json
+{
+    "availability_id": "3c9ae305-9c8f-40fc-9ea6-8b637cd2b98d"
+}
+```
+
+validações:
+
+- somente usuário de role ***PROFESSIONAL*** (psicólogo) pode criar um horário disponível.
+- usuário deve ter status **READY**
+
+---
+
+### **GET /availabilities?professional_id=*id123&status=AVAILABLE&filter=DAY, WEEK, MONTH, ALL***
+
+Retorna os horários disponíveis, em determinando período de tempo e status especificado, do usuário com role ***PROFESSIONAL*** especificado.
+
+Response **200**:
+
+```json
+[
+    {
+        "start_time": "2025-09-04T01:00:00+00:00",
+        "created_at": "2025-09-02T21:49:01.824691+00:00",
+        "owner_id": "703132ed-b6d6-42f3-8f37-f491a588f258",
+        "end_time": "2025-09-04T02:00:00+00:00",
+        "id": "da6f3bd2-c535-4a4c-840b-e2492e9fcb38",
+        "status": "AVAILABLE"
+    },
+    {
+        "start_time": "2025-09-04T10:00:00+00:00",
+        "created_at": "2025-09-02T21:52:24.028297+00:00",
+        "owner_id": "703132ed-b6d6-42f3-8f37-f491a588f258",
+        "end_time": "2025-09-04T11:00:00+00:00",
+        "id": "311a91fb-a796-47bf-89c4-a32fb60f7758",
+        "status": "AVAILABLE"
+    }
+]
+```
+
+Validações:
+
+- id de usuário deve existir
+- usuário relacionado ao id deve ter role ***PROFESSIONAL***
+- status deve existir (AVAILABLE, TAKEN, COMPLETED, CANCELED)
+- se o filter não for especificado, por padrão, retorna os horários na semana (WEEK)
+
+---
+
+### POST /availabilities/change-status
+
+Utilizado para alterar o status de um horário livre.
+
+Request:
+
+```json
+{
+    "availability_id": "da6f3bd2-c535-4a4c-840b-e2492e9fcb38",
+    "status": "AVAILABLE"
+}
+```
+
+Response **200**:
+
+```json
+{
+    "start_time": "2025-09-04T10:00:00+00:00",
+    "created_at": "2025-09-03T00:31:40.899691+00:00",
+    "id": "819b036c-c9a7-4cc5-8146-cc91656042a5",
+    "end_time": "2025-09-04T11:00:00+00:00",
+    "owner_id": "3f4f15d1-a337-41b1-985d-677130b3bcb2",
+    "status": "AVAILABLE"
+}
+```
+
+Validações:
+
+- status deve ser **“AVAILABLE”, “TAKEN”, “COMPLETED” ou** **“CANCELED”**.
+- usuário logado deve ter role ***PROFESSIONAL***
+- usuário deve ser o criador do horário (***owner_id*** do horário deve ser o mesmo do usuário)
+
+---
+
+# Schedule — consultas agendadas
+
+Uma consulta é uma **relação entre um usuário *PATIENT* e um horário *AVAILABILITIES.***
+
+---
+
+### **POST /schedule**
+
+agenda uma consulta relacionando o usuário autenticado e um id de horário disponível.
+
+Request:
+
+```json
+{
+		"availability_id": "819b036c-c9a7-4cc5-8146-cc91656042a5"
+}
+```
+
+Response **200**:
+
+```json
+{
+    "schedule_id": "fd7adee1-074d-4421-ba8c-391f9a7aff93"
+}
+```
+
+Validações:
+
+- o usuário autenticado deve ter role ***PATIENT***
+- o registro do horário disponível (**availability_id**) deve existir
+- o ***availability (horário)*** deve ter status ***AVAILABLE***
+- não deve existir outro ***schedule*** para o mesmo ***availability*** (unique **availability_id**)
+
+---
+
+### **GET /schedule?time_filter=DAY, WEEK, MONTH, ALL**
+
+retorna os agendamentos do usuário autenticado paginado. R**etorna lista de Schedule**
+
+Exemplo URI: `/schedule?time_filter=ALL`
+
+Response **200**:
+
+```json
+[
+    {
+        "id": "7d19351c-77dc-47cb-a7a0-4a2ff537e5b1",
+        "professional_id": "cc879044-17d2-43a0-bf6e-6b3f45fd13b9",
+        "patient_id": "03fb8d22-4224-4af9-b5af-c00955315c3f",
+        "availability_id": "51e84f05-10b4-4021-8844-44836ca36e7c",
+        "status": "TAKEN",
+        "start_time": "2025-10-05T10:00:00+00:00",
+        "created_at": "2025-09-03T15:36:59.778853+00:00"
+    },
+    {
+        "id": "24128082-ce97-47eb-88af-66474fa9109d",
+        "professional_id": "cc879044-17d2-43a0-bf6e-6b3f45fd13b9",
+        "patient_id": "03fb8d22-4224-4af9-b5af-c00955315c3f",
+        "availability_id": "4c76b1eb-1b87-4484-ac18-7bc742b6b7cf",
+        "status": "TAKEN",
+        "start_time": "2025-09-05T10:00:00+00:00",
+        "created_at": "2025-09-03T16:03:47.019575+00:00"
+    },
+    {
+        "id": "e0338c1f-7301-456e-b0aa-b9f13165d905",
+        "professional_id": "cc879044-17d2-43a0-bf6e-6b3f45fd13b9",
+        "patient_id": "03fb8d22-4224-4af9-b5af-c00955315c3f",
+        "availability_id": "b3dc128c-b626-467c-882c-071c2ffa8877",
+        "status": "TAKEN",
+        "start_time": "2025-09-03T10:00:00+00:00",
+        "created_at": "2025-09-03T16:09:34.235302+00:00"
+    }
+]
+```
