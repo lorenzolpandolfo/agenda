@@ -1,7 +1,7 @@
 from typing import List
 from uuid import UUID
 
-from fastapi import HTTPException, Security, status, APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Security, status
 from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.orm import Session
 
@@ -15,7 +15,6 @@ from api.modules.availabilities.request.availabilities_create_request import (
 )
 from api.modules.db.db import get_db
 from api.modules.security.security_service import SecurityService
-from api.modules.user.user_controller import get_user_service
 
 
 def get_availabilities_service(db: Session = Depends(get_db)):

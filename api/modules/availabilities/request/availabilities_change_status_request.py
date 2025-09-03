@@ -1,7 +1,8 @@
-from pydantic import BaseModel, field_validator
 from uuid import UUID
 
-from api.modules.enum.enum_availability_status import AvailabilityStatus
+from pydantic import BaseModel, field_validator
+
+from api.enum.enum_availability_status import AvailabilityStatus
 
 
 class AvailabilitiesUpdateStatusRequest(BaseModel):

@@ -1,7 +1,8 @@
 from datetime import datetime
+
 from pydantic import BaseModel, model_validator
 
-from api.modules.enum.enum_availability_status import AvailabilityStatus
+from api.enum.enum_availability_status import AvailabilityStatus
 
 
 class AvailabilitiesCreateRequest(BaseModel):

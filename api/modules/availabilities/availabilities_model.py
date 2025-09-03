@@ -1,9 +1,11 @@
+import uuid
+
 from sqlalchemy import Column, DateTime, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
-import uuid
+
+from api.enum.enum_availability_status import AvailabilityStatus
 from api.modules.db.db import Base
-from api.modules.enum.enum_availability_status import AvailabilityStatus
 
 
 class Availabilities(Base):

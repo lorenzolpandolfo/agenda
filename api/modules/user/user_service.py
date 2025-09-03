@@ -1,15 +1,14 @@
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
+from passlib.context import CryptContext
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
-from api.modules.enum.enum_user_roles import UserRoles
-from api.modules.enum.enum_user_status import UserStatus
+from api.enum.enum_user_roles import UserRoles
+from api.enum.enum_user_status import UserStatus
 from api.modules.user.request.user_login_request import UserLoginRequest
 from api.modules.user.request.user_register_request import UserRegisterRequest
 from api.modules.user.user_model import User
 from api.modules.user.user_repository import UserRepository
-from passlib.context import CryptContext
-
 from api.modules.user.user_validator import UserValidator
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -1,10 +1,12 @@
-from sqlalchemy import Column, String, DateTime, Enum
+import uuid
+
+from sqlalchemy import Column, DateTime, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
-import uuid
+
+from api.enum.enum_user_roles import UserRoles
+from api.enum.enum_user_status import UserStatus
 from api.modules.db.db import Base
-from api.modules.enum.enum_user_roles import UserRoles
-from api.modules.enum.enum_user_status import UserStatus
 
 
 class User(Base):

@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from starlette import status
 
-from api.modules.enum.enum_user_roles import UserRoles
-from api.modules.enum.enum_user_status import UserStatus
+from api.enum.enum_user_roles import UserRoles
+from api.enum.enum_user_status import UserStatus
 from api.modules.user.user_model import User
 
 

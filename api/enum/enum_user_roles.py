@@ -1,4 +1,4 @@
-from api.modules.enum.serializable_enum import SerializableEnum
+from api.enum.serializable_enum import SerializableEnum
 
 
 class UserRoles(SerializableEnum):
