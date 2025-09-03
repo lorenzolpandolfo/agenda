@@ -79,13 +79,8 @@ class UserService:
 
         user_to_verify: User = self.repo.find_by_id(user_id_to_verify)
 
+        UserValidator.validate_user(user_to_verify)
         UserValidator.validate_user_professional(user_to_verify)
-
-        if not user_to_verify:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found",
-            )
 
         user_to_verify.status = str(UserStatus.READY)
 

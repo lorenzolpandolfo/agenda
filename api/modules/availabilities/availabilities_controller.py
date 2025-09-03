@@ -41,7 +41,7 @@ async def availabilities(
     ),
 ):
     availability: Availabilities = service.create_availability(
-        data, credentials.subject.get("user_id")
+        data, credentials.subject.get("user_data").get("user_id")
     )
 
     if not availability:
@@ -82,7 +82,7 @@ async def change_status(
     ),
 ):
     availability: Availabilities = service.change_status(
-        data, credentials.subject.get("user_id")
+        data, credentials.subject.get("user_data").get("user_id")
     )
 
     return availability

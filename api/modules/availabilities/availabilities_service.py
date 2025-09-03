@@ -25,11 +25,7 @@ class AvailabilitiesService:
     def __get_owner_data_by_id(self, owner_id) -> User | None:
         owner_user: User = self.user_repo.find_by_id(owner_id)
 
-        if not owner_user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found",
-            )
+        UserValidator.validate_user(owner_user)
         return owner_user
 
     def create_availability(self, request: AvailabilitiesCreateRequest, owner_id):
@@ -65,8 +61,6 @@ class AvailabilitiesService:
 
     def change_status(self, request: AvailabilitiesUpdateStatusRequest, owner_id):
         owner_user: User = self.__get_owner_data_by_id(owner_id)
-
-        print(owner_user.status)
 
         UserValidator.validate_user_professional(owner_user)
         UserValidator.validate_user_professional_crp_ready(owner_user)

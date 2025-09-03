@@ -23,3 +23,11 @@ class UserValidator:
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User's CRP must be verified to perform this action.",
             )
+
+    @staticmethod
+    def validate_user(user):
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found",
+            )
