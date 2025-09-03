@@ -22,7 +22,7 @@ CREATE TABLE availabilities (
     start_time TIMESTAMP WITH TIME ZONE NOT NULL,
     end_time TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(50) DEFAULT 'ACTIVE', -- AVAILABLE / TAKEN / COMPLETED / CANCELED
+    status VARCHAR(50) DEFAULT 'AVAILABLE', -- AVAILABLE / TAKEN / COMPLETED / CANCELED
     CONSTRAINT fk_owner FOREIGN KEY(owner_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE(owner_id, start_time, end_time)
 );
@@ -70,32 +70,3 @@ SELECT id, '2025-09-04 08:00:00+00', '2025-09-04 09:00:00+00' FROM users WHERE e
 -- Beatriz Lima (em validação, não vai ter agendamentos ainda)
 INSERT INTO availabilities (owner_id, start_time, end_time)
 SELECT id, '2025-09-05 10:00:00+00', '2025-09-05 11:00:00+00' FROM users WHERE email = 'beatriz.l@email.com';
-
--- Agendamentos
--- João Pereira com Dr. Ana Silva (usa a primeira disponibilidade de Ana)
-INSERT INTO schedule (professional_id, patient_id, availability_id, status)
-SELECT p.id, c.id, a.id, 'ACTIVE'
-FROM users p, users c, availabilities a
-WHERE p.email = 'ana.silva@email.com'
-  AND c.email = 'joao.p@email.com'
-  AND a.owner_id = p.id
-ORDER BY a.start_time
-LIMIT 1;
-
--- Lorenzo Pandolfo com Dr. Ana Silva (usa a segunda disponibilidade de Ana)
-INSERT INTO schedule (professional_id, patient_id, availability_id, status)
-SELECT p.id, c.id, a.id, 'ACTIVE'
-FROM users p, users c, availabilities a
-WHERE p.email = 'ana.silva@email.com'
-  AND c.email = 'lorenzo.p@email.com'
-ORDER BY a.start_time DESC
-LIMIT 1;
-
--- Maria Oliveira com Dr. Carlos Souza (usa a primeira disponibilidade de Carlos)
-INSERT INTO schedule (professional_id, patient_id, availability_id, status)
-SELECT p.id, c.id, a.id, 'ACTIVE'
-FROM users p, users c, availabilities a
-WHERE p.email = 'carlos.souza@email.com'
-  AND c.email = 'maria.o@email.com'
-ORDER BY a.start_time
-LIMIT 1;

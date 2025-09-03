@@ -1,7 +1,10 @@
+from uuid import UUID
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
+from api.enum.time_enum import TimeEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.availabilities.availabilities_repository import (
     AvailabilitiesRepository,
@@ -12,18 +15,18 @@ from api.modules.availabilities.request.availabilities_change_status_request imp
 from api.modules.availabilities.request.availabilities_create_request import (
     AvailabilitiesCreateRequest,
 )
-from api.modules.user.user_repository import UserRepository
 from api.modules.user.user_model import User
+from api.modules.user.user_repository import UserRepository
 from api.modules.user.user_validator import UserValidator
 
 
 class AvailabilitiesService:
     def __init__(self, db: Session):
-        self.repo: AvailabilitiesRepository = AvailabilitiesRepository(db)
-        self.user_repo: UserRepository = UserRepository(db)
+        self.__repo: AvailabilitiesRepository = AvailabilitiesRepository(db)
+        self.__user_repo: UserRepository = UserRepository(db)
 
     def __get_owner_data_by_id(self, owner_id) -> User | None:
-        owner_user: User = self.user_repo.find_by_id(owner_id)
+        owner_user: User = self.__user_repo.find_by_id(owner_id)
 
         UserValidator.validate_user(owner_user)
         return owner_user
@@ -34,7 +37,9 @@ class AvailabilitiesService:
         UserValidator.validate_user_professional(owner_user)
         UserValidator.validate_user_professional_crp_ready(owner_user)
 
-        if self.repo.exists_or_overlap(request.start_time, request.end_time, owner_id):
+        if self.__repo.exists_or_overlap(
+            request.start_time, request.end_time, owner_id
+        ):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="start_time and end_time are conflicting with another availability for this user.",
@@ -46,10 +51,12 @@ class AvailabilitiesService:
             status=request.status,
             owner_id=owner_id,
         )
-        return self.repo.save(availability)
+        return self.__repo.save(availability)
 
-    def get_availabilities(self, professional_id):
-        availability_list = self.repo.find_all_by_owner_id(professional_id)
+    def get_availabilities(self, professional_id: UUID, time_filter: TimeEnum):
+        availability_list = self.__repo.find_all_by_owner_id_and_time(
+            professional_id, time_filter
+        )
 
         if not availability_list:
             raise HTTPException(
@@ -65,7 +72,7 @@ class AvailabilitiesService:
         UserValidator.validate_user_professional(owner_user)
         UserValidator.validate_user_professional_crp_ready(owner_user)
 
-        availability: Availabilities = self.repo.find_by_id(request.availability_id)
+        availability: Availabilities = self.__repo.find_by_id(request.availability_id)
 
         if not availability:
             raise HTTPException(
@@ -80,4 +87,4 @@ class AvailabilitiesService:
             )
 
         availability.status = request.status
-        return self.repo.save(availability)
+        return self.__repo.save(availability)

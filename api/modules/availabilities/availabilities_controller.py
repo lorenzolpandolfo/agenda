@@ -1,10 +1,11 @@
 from typing import List
 from uuid import UUID
 
-from fastapi import HTTPException, Security, status, APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Security, status
 from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.orm import Session
 
+from api.enum.time_enum import TimeEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.availabilities.availabilities_service import AvailabilitiesService
 from api.modules.availabilities.request.availabilities_change_status_request import (
@@ -15,7 +16,6 @@ from api.modules.availabilities.request.availabilities_create_request import (
 )
 from api.modules.db.db import get_db
 from api.modules.security.security_service import SecurityService
-from api.modules.user.user_controller import get_user_service
 
 
 def get_availabilities_service(db: Session = Depends(get_db)):
@@ -56,18 +56,14 @@ async def availabilities(
 @router.get("")
 async def availabilities(
     professional_id: UUID,
+    time_filter: TimeEnum | None = TimeEnum.WEEK,
     service: AvailabilitiesService = Depends(get_availabilities_service),
     credentials: JwtAuthorizationCredentials = Security(
         get_security_service().access_security
     ),
 ):
-    if not professional_id:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid request"
-        )
-
     availability_list: List[Availabilities] = service.get_availabilities(
-        professional_id
+        professional_id, time_filter
     )
 
     return availability_list
@@ -84,5 +80,4 @@ async def change_status(
     availability: Availabilities = service.change_status(
         data, credentials.subject.get("user_data").get("user_id")
     )
-
     return availability

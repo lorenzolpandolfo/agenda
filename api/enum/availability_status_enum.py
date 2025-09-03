@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class AvailabilityStatus(Enum):
+class AvailabilityStatusEnum(Enum):
     AVAILABLE = "AVAILABLE"
     TAKEN = "TAKEN"
     COMPLETED = "COMPLETED"
