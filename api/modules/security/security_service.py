@@ -1,7 +1,8 @@
 from datetime import timedelta
+
 from fastapi_jwt import (
-    JwtAuthorizationCredentials,
     JwtAccessBearerCookie,
+    JwtAuthorizationCredentials,
     JwtRefreshBearer,
 )
 
