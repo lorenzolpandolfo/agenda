@@ -1,6 +1,6 @@
 from api.enum.serializable_enum import SerializableEnum
 
 
-class UserRoles(SerializableEnum):
+class UserRolesEnum(SerializableEnum):
     PATIENT = "PATIENT"
     PROFESSIONAL = "PROFESSIONAL"

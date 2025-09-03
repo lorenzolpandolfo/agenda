@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, Security
 from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.orm import Session
 
+from api.enum.time_enum import TimeEnum
 from api.modules.db.db import get_db
 from api.modules.schedule.request.schedule_create_request import ScheduleCreateRequest
 from api.modules.schedule.schedule_model import Schedule
@@ -34,3 +35,14 @@ async def schedule(
     new_schedule: Schedule = service.create_schedule(data, credentials.subject)
 
     return {"schedule_id": new_schedule.id}
+
+
+@router.get("")
+async def schedule(
+    time_filter: TimeEnum | None = TimeEnum.WEEK,
+    service: ScheduleService = Depends(get_schedule_service),
+    credentials: JwtAuthorizationCredentials = Security(
+        get_security_service().access_security
+    ),
+):
+    return service.get_schedules(time_filter, credentials.subject)

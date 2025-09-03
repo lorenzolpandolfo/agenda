@@ -3,8 +3,7 @@ from passlib.context import CryptContext
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from api.enum.enum_user_roles import UserRoles
-from api.enum.enum_user_status import UserStatus
+from api.enum.user_status_enum import UserStatusEnum
 from api.modules.user.request.user_login_request import UserLoginRequest
 from api.modules.user.request.user_register_request import UserRegisterRequest
 from api.modules.user.user_mapper import UserMapper
@@ -63,6 +62,6 @@ class UserService:
         UserValidator.validate_user(user_to_verify)
         UserValidator.validate_user_professional(user_to_verify)
 
-        user_to_verify.status = str(UserStatus.READY)
+        user_to_verify.status = str(UserStatusEnum.READY)
 
         return self.__repo.save(user_to_verify)

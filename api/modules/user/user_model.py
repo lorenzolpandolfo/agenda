@@ -4,8 +4,8 @@ from sqlalchemy import Column, DateTime, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 
-from api.enum.enum_user_roles import UserRoles
-from api.enum.enum_user_status import UserStatus
+from api.enum.user_roles_enum import UserRolesEnum
+from api.enum.user_status_enum import UserStatusEnum
 from api.modules.db.db import Base
 
 
@@ -16,8 +16,8 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
-    role = Column(Enum(UserRoles, name="role"), nullable=False)
-    status = Column(Enum(UserStatus, name="status"), nullable=False)
+    role = Column(Enum(UserRolesEnum, name="role"), nullable=False)
+    status = Column(Enum(UserStatusEnum, name="status"), nullable=False)
     crp = Column(String, nullable=False, unique=True)
     phone = Column(String, unique=True)
     bio = Column(String)

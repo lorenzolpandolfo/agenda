@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 
-from api.enum.enum_availability_status import AvailabilityStatus
-from api.enum.enum_user_roles import UserRoles
+from api.enum.availability_status_enum import AvailabilityStatusEnum
+from api.enum.user_roles_enum import UserRolesEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.user.user_model import User
 
@@ -19,13 +19,13 @@ class AvailabilitiesValidator:
     ):
         AvailabilitiesValidator.validate_availability(availability)
 
-        if availability.status != AvailabilityStatus.AVAILABLE:
+        if availability.status != AvailabilityStatusEnum.AVAILABLE:
             raise HTTPException(
                 status_code=400,
                 detail="This availability cannot be scheduled.",
             )
 
-        if user_who_schedules.role != str(UserRoles.PATIENT):
+        if user_who_schedules.role != str(UserRolesEnum.PATIENT):
             raise HTTPException(
                 status_code=403,
                 detail="This user can not perform this action.",

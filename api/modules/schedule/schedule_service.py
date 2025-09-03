@@ -5,7 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette import status
 
-from api.enum.enum_availability_status import AvailabilityStatus
+from api.enum.availability_status_enum import AvailabilityStatusEnum
+from api.enum.time_enum import TimeEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.availabilities.availabilities_repository import (
     AvailabilitiesRepository,
@@ -37,8 +38,6 @@ class ScheduleService:
 
         AvailabilitiesValidator.validate_if_can_schedule(availability, user)
 
-        self.__update_availability_to_schedule(availability)
-
         schedule: Schedule = ScheduleMapper.to_schedule(
             professional_id=availability.owner_id,
             patient_id=user.id,
@@ -46,7 +45,9 @@ class ScheduleService:
         )
 
         try:
-            return self.__repo.save(schedule)
+            schedule: Schedule = self.__repo.save(schedule)
+            self.__update_availability_to_taken(availability)
+            return schedule
 
         except IntegrityError:
             raise HTTPException(
@@ -54,6 +55,17 @@ class ScheduleService:
                 detail="This schedule already exists",
             )
 
-    def __update_availability_to_schedule(self, availability: Availabilities):
-        availability.status = AvailabilityStatus.TAKEN
+    def __update_availability_to_taken(self, availability: Availabilities):
+        availability.status = AvailabilityStatusEnum.TAKEN
         self.__availabilities_repo.save(availability)
+
+    def get_schedules(self, time_filter: TimeEnum, subject: Dict[str, Any]):
+        user: User = UserMapper.subject_to_user(subject)
+
+        schedule_list: list[Schedule] = (
+            self.__repo.find_by_professional_id_or_patient_id_filter_by_time(
+                user.id, user.id, time_filter
+            )
+        )
+
+        return [ScheduleMapper.to_schedule_response(s) for s in schedule_list]

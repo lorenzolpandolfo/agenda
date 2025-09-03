@@ -1,7 +1,7 @@
 from typing import Any, Dict
 
-from api.enum.enum_user_roles import UserRoles
-from api.enum.enum_user_status import UserStatus
+from api.enum.user_roles_enum import UserRolesEnum
+from api.enum.user_status_enum import UserStatusEnum
 from api.modules.user.request.user_register_request import UserRegisterRequest
 from api.modules.user.user_model import User
 
@@ -45,8 +45,12 @@ class UserMapper:
             email=request.email,
             password_hash=password_hash,
             name=request.name,
-            role=UserRoles.PROFESSIONAL if request.crp else UserRoles.PATIENT,
-            status=(UserStatus.WAITING_VALIDATION if request.crp else UserStatus.READY),
+            role=UserRolesEnum.PROFESSIONAL if request.crp else UserRolesEnum.PATIENT,
+            status=(
+                UserStatusEnum.WAITING_VALIDATION
+                if request.crp
+                else UserStatusEnum.READY
+            ),
             crp=request.crp if request.crp else None,
             phone=request.phone if request.phone else None,
             bio=request.bio if request.bio else None,
