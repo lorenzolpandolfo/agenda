@@ -11,5 +11,7 @@ class AvailabilitiesUpdateStatusRequest(BaseModel):
     @field_validator("status")
     def validate_status(cls, v):
         if not AvailabilityStatus(v):
-            return ValueError("Invalid availability status (must be AVAILABLE, TAKEN, COMPLETED, or CANCELED)")
+            return ValueError(
+                "Invalid availability status (must be AVAILABLE, TAKEN, COMPLETED, or CANCELED)"
+            )
         return v

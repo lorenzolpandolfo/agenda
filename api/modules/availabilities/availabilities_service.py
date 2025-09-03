@@ -3,16 +3,21 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from api.modules.availabilities.availabilities_model import Availabilities
-from api.modules.availabilities.availabilities_repository import AvailabilitiesRepository
-from api.modules.availabilities.request.availabilities_change_status_request import AvailabilitiesUpdateStatusRequest
-from api.modules.availabilities.request.availabilities_create_request import AvailabilitiesCreateRequest
+from api.modules.availabilities.availabilities_repository import (
+    AvailabilitiesRepository,
+)
+from api.modules.availabilities.request.availabilities_change_status_request import (
+    AvailabilitiesUpdateStatusRequest,
+)
+from api.modules.availabilities.request.availabilities_create_request import (
+    AvailabilitiesCreateRequest,
+)
 from api.modules.user.user_repository import UserRepository
 from api.modules.user.user_model import User
 from api.modules.user.user_validator import UserValidator
 
 
 class AvailabilitiesService:
-
     def __init__(self, db: Session):
         self.repo: AvailabilitiesRepository = AvailabilitiesRepository(db)
         self.user_repo: UserRepository = UserRepository(db)
@@ -27,17 +32,16 @@ class AvailabilitiesService:
             )
         return owner_user
 
-
     def create_availability(self, request: AvailabilitiesCreateRequest, owner_id):
-
         owner_user: User = self.__get_owner_data_by_id(owner_id)
 
         UserValidator.validate_user_professional(owner_user)
+        UserValidator.validate_user_professional_crp_ready(owner_user)
 
         if self.repo.exists_or_overlap(request.start_time, request.end_time, owner_id):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="start_time and end_time are conflicting with another availability for this user."
+                detail="start_time and end_time are conflicting with another availability for this user.",
             )
 
         availability = Availabilities(
@@ -46,17 +50,15 @@ class AvailabilitiesService:
             status=request.status,
             owner_id=owner_id,
         )
-
         return self.repo.save(availability)
 
     def get_availabilities(self, professional_id):
-
         availability_list = self.repo.find_all_by_owner_id(professional_id)
 
         if not availability_list:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No availabilities found for this professional_id."
+                detail="No availabilities found for this professional_id.",
             )
 
         return availability_list
@@ -64,20 +66,23 @@ class AvailabilitiesService:
     def change_status(self, request: AvailabilitiesUpdateStatusRequest, owner_id):
         owner_user: User = self.__get_owner_data_by_id(owner_id)
 
+        print(owner_user.status)
+
         UserValidator.validate_user_professional(owner_user)
+        UserValidator.validate_user_professional_crp_ready(owner_user)
 
         availability: Availabilities = self.repo.find_by_id(request.availability_id)
 
         if not availability:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No availabilities found for this availability_id."
+                detail="No availabilities found for this availability_id.",
             )
 
         if str(availability.owner_id) != str(owner_user.id):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You are not authorized to perform this action."
+                detail="You are not authorized to perform this action.",
             )
 
         availability.status = request.status

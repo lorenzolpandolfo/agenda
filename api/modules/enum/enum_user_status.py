@@ -1,9 +1,6 @@
-from enum import Enum
+from api.modules.enum.serializable_enum import SerializableEnum
 
 
-class UserStatus(Enum):
-    READY = 0
-    WAITING_VALIDATION = 1
-
-    def __str__(self) -> str:
-        return self.name
+class UserStatus(SerializableEnum):
+    READY = "READY"
+    WAITING_VALIDATION = "WAITING_VALIDATION"

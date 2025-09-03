@@ -10,13 +10,19 @@ class AvailabilitiesRepository:
         self.__db = db
 
     def find_by_id(self, av_id) -> Availabilities | None:
-        return self.__db.query(Availabilities).filter(Availabilities.id == av_id).first()
+        return (
+            self.__db.query(Availabilities).filter(Availabilities.id == av_id).first()
+        )
 
     def find_all(self) -> list[Type[Availabilities]]:
         return self.__db.query(Availabilities).all()
 
     def find_all_by_owner_id(self, owner_id) -> list[Type[Availabilities]] | None:
-        return self.__db.query(Availabilities).filter(Availabilities.owner_id == owner_id).all()
+        return (
+            self.__db.query(Availabilities)
+            .filter(Availabilities.owner_id == owner_id)
+            .all()
+        )
 
     def save(self, availability) -> Availabilities:
         self.__db.add(availability)
@@ -37,8 +43,8 @@ class AvailabilitiesRepository:
                         and_(
                             Availabilities.start_time < end_time,
                             Availabilities.end_time > start_time,
-                        )
-                    )
+                        ),
+                    ),
                 )
             )
         ).scalar()
