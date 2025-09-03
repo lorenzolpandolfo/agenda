@@ -33,7 +33,9 @@ class UserRegisterRequest(BaseModel):
         return email
 
     @field_validator("crp")
-    def validate_crp(cls, crp: str):
+    def validate_crp(cls, crp: str | None):
+        if crp is None:
+            return crp
         if len(crp) != CRP_SIZE:
             raise ValueError("Invalid CRP format")
         return crp
