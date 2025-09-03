@@ -1,9 +1,6 @@
-from enum import Enum
+from api.modules.enum.serializable_enum import SerializableEnum
 
 
-class UserRoles(Enum):
-    PATIENT = 0
-    PROFESSIONAL = 1
-
-    def __str__(self) -> str:
-        return self.name
+class UserRoles(SerializableEnum):
+    PATIENT = "PATIENT"
+    PROFESSIONAL = "PROFESSIONAL"
