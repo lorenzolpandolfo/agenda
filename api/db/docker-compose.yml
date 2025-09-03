@@ -8,10 +8,10 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: agenda
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - agenda_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - '5432:5432'
 
 volumes:
-  postgres_data:
+  agenda_data:
