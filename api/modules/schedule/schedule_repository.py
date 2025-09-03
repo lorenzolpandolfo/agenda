@@ -43,8 +43,6 @@ class ScheduleRepository:
 
         now = datetime.now()
 
-        print(time_filter)
-
         match time_filter:
             case TimeEnum.DAY:
                 start = datetime(now.year, now.month, now.day)

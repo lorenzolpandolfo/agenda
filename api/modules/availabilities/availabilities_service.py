@@ -1,7 +1,10 @@
+from uuid import UUID
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
+from api.enum.time_enum import TimeEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.availabilities.availabilities_repository import (
     AvailabilitiesRepository,
@@ -50,8 +53,10 @@ class AvailabilitiesService:
         )
         return self.__repo.save(availability)
 
-    def get_availabilities(self, professional_id):
-        availability_list = self.__repo.find_all_by_owner_id(professional_id)
+    def get_availabilities(self, professional_id: UUID, time_filter: TimeEnum):
+        availability_list = self.__repo.find_all_by_owner_id_and_time(
+            professional_id, time_filter
+        )
 
         if not availability_list:
             raise HTTPException(
