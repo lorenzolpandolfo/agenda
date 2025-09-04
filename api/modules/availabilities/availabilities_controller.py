@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Security, status
 from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.orm import Session
 
+from api.enum.availability_status_enum import AvailabilityStatusEnum
 from api.enum.time_enum import TimeEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.availabilities.availabilities_service import AvailabilitiesService
@@ -41,7 +42,7 @@ async def availabilities(
     ),
 ):
     availability: Availabilities = service.create_availability(
-        data, credentials.subject.get("user_data").get("user_id")
+        data, credentials.subject.get("user_id")
     )
 
     if not availability:
@@ -55,15 +56,16 @@ async def availabilities(
 
 @router.get("")
 async def availabilities(
-    professional_id: UUID,
+    professional_id: UUID | None = None,
     time_filter: TimeEnum | None = TimeEnum.WEEK,
+    status: AvailabilityStatusEnum | None = AvailabilityStatusEnum.AVAILABLE,
     service: AvailabilitiesService = Depends(get_availabilities_service),
     credentials: JwtAuthorizationCredentials = Security(
         get_security_service().access_security
     ),
 ):
     availability_list: List[Availabilities] = service.get_availabilities(
-        professional_id, time_filter
+        professional_id, time_filter, status
     )
 
     return availability_list
@@ -78,6 +80,6 @@ async def change_status(
     ),
 ):
     availability: Availabilities = service.change_status(
-        data, credentials.subject.get("user_data").get("user_id")
+        data, credentials.subject.get("user_id")
     )
     return availability

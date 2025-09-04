@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from sqlalchemy.exc import IntegrityError
@@ -6,6 +8,7 @@ from sqlalchemy.orm import Session
 from api.enum.user_status_enum import UserStatusEnum
 from api.modules.user.request.user_login_request import UserLoginRequest
 from api.modules.user.request.user_register_request import UserRegisterRequest
+from api.modules.user.response.user_response import UserResponse
 from api.modules.user.user_mapper import UserMapper
 from api.modules.user.user_model import User
 from api.modules.user.user_repository import UserRepository
@@ -22,16 +25,17 @@ class UserService:
     def __init__(self, db: Session):
         self.__repo = UserRepository(db)
 
-    def get_user_data(self, user_id, credentials_subject):
+    def get_user_data(self, user_id, credentials_subject) -> UserResponse:
         if not user_id:
-            user_id = credentials_subject.get("user_data").get("user_id")
+            user_id = credentials_subject.get("user_id")
 
         user: User = self.__repo.find_by_id(user_id)
 
         UserValidator.validate_user(user)
-        return user
 
-    def login(self, data: UserLoginRequest) -> User | None:
+        return UserMapper.to_user_response(user)
+
+    def login(self, data: UserLoginRequest) -> UUID:
         user = self.__repo.find_by_email(data.email)
 
         if not user or not pwd_context.verify(data.password, user.password_hash):
@@ -40,15 +44,17 @@ class UserService:
                 detail="Invalid email or password",
             )
 
-        return user
+        return user.id
 
-    def register(self, data: UserRegisterRequest) -> User:
+    def register(self, data: UserRegisterRequest) -> UserResponse:
         user = UserMapper.user_register_request_to_user(
             request=data, password_hash=hash_password(data.password)
         )
 
         try:
-            return self.__repo.save(user)
+            user: User = self.__repo.save(user)
+
+            return UserMapper.to_user_response(user)
 
         except IntegrityError:
             raise HTTPException(

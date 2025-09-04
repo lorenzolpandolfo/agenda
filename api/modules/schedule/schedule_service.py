@@ -16,8 +16,8 @@ from api.modules.schedule.request.schedule_create_request import ScheduleCreateR
 from api.modules.schedule.schedule_mapper import ScheduleMapper
 from api.modules.schedule.schedule_model import Schedule
 from api.modules.schedule.schedule_repository import ScheduleRepository
-from api.modules.user.user_mapper import UserMapper
 from api.modules.user.user_model import User
+from api.modules.user.user_repository import UserRepository
 
 
 class ScheduleService:
@@ -26,6 +26,7 @@ class ScheduleService:
         self.__availabilities_repo: AvailabilitiesRepository = AvailabilitiesRepository(
             db
         )
+        self.__user_repo: UserRepository = UserRepository(db)
 
     def create_schedule(
         self, request: ScheduleCreateRequest, subject: Dict[str, Any]
@@ -33,8 +34,7 @@ class ScheduleService:
         availability: Availabilities = self.__availabilities_repo.find_by_id(
             request.availability_id
         )
-
-        user: User = UserMapper.subject_to_user(subject)
+        user: User = self.__user_repo.find_by_id(subject.get("user_id"))
 
         AvailabilitiesValidator.validate_if_can_schedule(availability, user)
 
@@ -60,7 +60,7 @@ class ScheduleService:
         self.__availabilities_repo.save(availability)
 
     def get_schedules(self, time_filter: TimeEnum, subject: Dict[str, Any]):
-        user: User = UserMapper.subject_to_user(subject)
+        user: User = self.__user_repo.find_by_id(subject.get("user_id"))
 
         schedule_list: list[Schedule] = (
             self.__repo.find_by_professional_id_or_patient_id_filter_by_time(

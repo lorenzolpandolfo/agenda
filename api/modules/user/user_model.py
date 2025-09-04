@@ -2,6 +2,7 @@ import uuid
 
 from sqlalchemy import Column, DateTime, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from api.enum.user_roles_enum import UserRolesEnum
@@ -25,3 +26,5 @@ class User(Base):
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
+
+    availabilities = relationship("Availabilities", back_populates="user")

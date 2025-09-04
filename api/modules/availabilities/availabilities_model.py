@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, DateTime, Enum
+from sqlalchemy import Column, DateTime, Enum, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -13,7 +13,7 @@ class Availabilities(Base):
     __tablename__ = "availabilities"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    owner_id = Column(UUID(as_uuid=True), nullable=False)
+    owner_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     start_time = Column(DateTime(timezone=True), nullable=False)
     end_time = Column(DateTime(timezone=True), nullable=False)
     created_at = Column(
@@ -21,4 +21,5 @@ class Availabilities(Base):
     )
     status = Column(Enum(AvailabilityStatusEnum, name="status"), nullable=False)
 
+    user = relationship("User", back_populates="availabilities")
     schedules = relationship("Schedule", back_populates="availability")

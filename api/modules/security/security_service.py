@@ -23,9 +23,9 @@ class SecurityService:
             access_expires_delta=timedelta(hours=REFRESH_TOKEN_EXPIRE_DAYS),
         )
 
-    def auth(self, subject):
-        access_token = self.access_security.create_access_token(subject=subject)
-        refresh_token = self.refresh_security.create_refresh_token(subject=subject)
+    def auth(self, sub):
+        access_token = self.access_security.create_access_token(subject=sub)
+        refresh_token = self.refresh_security.create_refresh_token(subject=sub)
         return {"access_token": access_token, "refresh_token": refresh_token}
 
     def refresh(self, credentials: JwtAuthorizationCredentials):

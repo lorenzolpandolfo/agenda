@@ -8,413 +8,440 @@
 	},
 	"item": [
 		{
-			"name": "Login",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijp7InVzZXJJZCI6IjMxMDkzODIzOTEzMTIzMjczODEyNzgifSwidHlwZSI6ImFjY2VzcyIsImV4cCI6MTc1Njc0ODc0MSwiaWF0IjoxNzU2NzQ1MTQxLCJqdGkiOiI2MWNmNzNmYS03MzQ2LTQ0YzAtYWM5ZS00N2YzMGU2YjJjNDUifQ.9TjvGTDN6YvoG2dY4fTi70Tq62X8B8YySBcAnNA86L4",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\":\"lorenzo@gmail.com\",\n    \"password\":\"123123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/user/login",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Register",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"lorenzo@gmail.com\",\n    \"password\": \"123123\",\n    \"name\": \"Lorenzo Pandolfo\",\n    // \"crp\":\"CRP/01-12345\",\n    \"bio\": \"Estudante de Programação\",\n    \"image_url\": \"link_para_imagem.jpeg\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/user/register",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Auth refresh",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{api_url}}/auth/refresh",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"auth",
-						"refresh"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create a Availability register",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"start_time\": \"2025-09-03T10:00:00Z\",\n    \"end_time\": \"2025-09-03T11:00:00Z\",\n    \"status\": \"AVAILABLE\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/availabilities",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"availabilities"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get all availabilities from a user",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/availabilities?professional_id=cc879044-17d2-43a0-bf6e-6b3f45fd13b9&time_filter=DAY",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"availabilities"
-					],
-					"query": [
-						{
-							"key": "professional_id",
-							"value": "cc879044-17d2-43a0-bf6e-6b3f45fd13b9"
+			"name": "auth",
+			"item": [
+				{
+					"name": "Auth refresh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "time_filter",
-							"value": "DAY"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Verify CRP",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/user/verify-crp?user_id=744e67e1-b833-4c26-b6e4-8bd277a6891c",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"user",
-						"verify-crp"
-					],
-					"query": [
-						{
-							"key": "user_id",
-							"value": "744e67e1-b833-4c26-b6e4-8bd277a6891c"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get user data",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/user?user_id=553e4d70-dc69-43db-8c69-9ab8d947e9a2",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"user"
-					],
-					"query": [
-						{
-							"key": "user_id",
-							"value": "553e4d70-dc69-43db-8c69-9ab8d947e9a2"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Change availability status",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"availability_id\": \"da6f3bd2-c535-4a4c-840b-e2492e9fcb38\",\n    \"status\": \"AVAILABLE\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/availabilities/change-status",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"availabilities",
-						"change-status"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create new Schedule",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"availability_id\": \"b3dc128c-b626-467c-882c-071c2ffa8877\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{api_url}}/schedule",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"schedule"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get schedules",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api_url}}/schedule?time_filter=DAY",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"schedule"
-					],
-					"query": [
-						{
-							"key": "time_filter",
-							"value": "DAY"
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
-						{
-							"key": "time_filter",
-							"value": "WEEK",
-							"disabled": true
-						},
-						{
-							"key": "time_filter",
-							"value": "MONTH",
-							"disabled": true
-						},
-						{
-							"key": "time_filter",
-							"value": "ALL",
-							"disabled": true
+						"url": {
+							"raw": "{{api_url}}/auth/refresh",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Get all users by role",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{auth_token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"lorenzo@gmail.com\",\n    \"password\": \"123123\",\n    \"name\": \"Lorenzo Pandolfo\",\n    // \"crp\":\"CRP/01-12345\",\n    \"bio\": \"Estudante de Programação\",\n    \"image_url\": \"link_para_imagem.jpeg\"\n}"
-				},
-				"url": {
-					"raw": "{{api_url}}/user/all?role=PROFESSIONAL&skip=0&limit=50",
-					"host": [
-						"{{api_url}}"
-					],
-					"path": [
-						"user",
-						"all"
-					],
-					"query": [
-						{
-							"key": "role",
-							"value": "PROFESSIONAL"
+			"name": "user",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0Ijp7InVzZXJJZCI6IjMxMDkzODIzOTEzMTIzMjczODEyNzgifSwidHlwZSI6ImFjY2VzcyIsImV4cCI6MTc1Njc0ODc0MSwiaWF0IjoxNzU2NzQ1MTQxLCJqdGkiOiI2MWNmNzNmYS03MzQ2LTQ0YzAtYWM5ZS00N2YzMGU2YjJjNDUifQ.9TjvGTDN6YvoG2dY4fTi70Tq62X8B8YySBcAnNA86L4",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "skip",
-							"value": "0"
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lorenzo@gmail.com\",\n    \"password\":\"123123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "limit",
-							"value": "50"
+						"url": {
+							"raw": "{{api_url}}/user/login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"lorenzo@gmail.com\",\n    \"password\": \"123123\",\n    \"name\": \"Lorenzo Pandolfo\",\n    // \"crp\":\"CRP/01-12345\",\n    \"bio\": \"Estudante de Programação\",\n    \"image_url\": \"link_para_imagem.jpeg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/user/register",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify CRP",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/user/verify-crp?user_id=744e67e1-b833-4c26-b6e4-8bd277a6891c",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"user",
+								"verify-crp"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "744e67e1-b833-4c26-b6e4-8bd277a6891c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user data",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/user?user_id=553e4d70-dc69-43db-8c69-9ab8d947e9a2",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "553e4d70-dc69-43db-8c69-9ab8d947e9a2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users by role",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"lorenzo@gmail.com\",\n    \"password\": \"123123\",\n    \"name\": \"Lorenzo Pandolfo\",\n    // \"crp\":\"CRP/01-12345\",\n    \"bio\": \"Estudante de Programação\",\n    \"image_url\": \"link_para_imagem.jpeg\"\n}"
+						},
+						"url": {
+							"raw": "{{api_url}}/user/all?role=PROFESSIONAL&skip=0&limit=50",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"user",
+								"all"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "PROFESSIONAL"
+								},
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "availabilities",
+			"item": [
+				{
+					"name": "Create a Availability register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"start_time\": \"2025-09-03T10:00:00Z\",\n    \"end_time\": \"2025-09-03T11:00:00Z\",\n    \"status\": \"AVAILABLE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/availabilities",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"availabilities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all availabilities from a user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/availabilities",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"availabilities"
+							],
+							"query": [
+								{
+									"key": "professional_id",
+									"value": "cc879044-17d2-43a0-bf6e-6b3f45fd13b9",
+									"disabled": true
+								},
+								{
+									"key": "time_filter",
+									"value": "DAY",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "AVAILABLE",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change availability status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"availability_id\": \"da6f3bd2-c535-4a4c-840b-e2492e9fcb38\",\n    \"status\": \"AVAILABLE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/availabilities/change-status",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"availabilities",
+								"change-status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "schedule",
+			"item": [
+				{
+					"name": "Create new Schedule",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"availability_id\": \"b3dc128c-b626-467c-882c-071c2ffa8877\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/schedule",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get schedules",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/schedule?time_filter=DAY",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"schedule"
+							],
+							"query": [
+								{
+									"key": "time_filter",
+									"value": "DAY"
+								},
+								{
+									"key": "time_filter",
+									"value": "WEEK",
+									"disabled": true
+								},
+								{
+									"key": "time_filter",
+									"value": "MONTH",
+									"disabled": true
+								},
+								{
+									"key": "time_filter",
+									"value": "ALL",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [

@@ -25,7 +25,7 @@ class AvailabilitiesValidator:
                 detail="This availability cannot be scheduled.",
             )
 
-        if user_who_schedules.role != str(UserRolesEnum.PATIENT):
+        if user_who_schedules.role != UserRolesEnum.PATIENT:
             raise HTTPException(
                 status_code=403,
                 detail="This user can not perform this action.",

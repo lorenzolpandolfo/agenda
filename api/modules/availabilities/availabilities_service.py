@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 
+from api.enum.availability_status_enum import AvailabilityStatusEnum
 from api.enum.time_enum import TimeEnum
 from api.modules.availabilities.availabilities_model import Availabilities
 from api.modules.availabilities.availabilities_repository import (
@@ -14,6 +15,9 @@ from api.modules.availabilities.request.availabilities_change_status_request imp
 )
 from api.modules.availabilities.request.availabilities_create_request import (
     AvailabilitiesCreateRequest,
+)
+from api.modules.availabilities.response.availabilities_response import (
+    AvailabilitiesResponse,
 )
 from api.modules.user.user_model import User
 from api.modules.user.user_repository import UserRepository
@@ -53,20 +57,26 @@ class AvailabilitiesService:
         )
         return self.__repo.save(availability)
 
-    def get_availabilities(self, professional_id: UUID, time_filter: TimeEnum):
-        availability_list = self.__repo.find_all_by_owner_id_and_time(
-            professional_id, time_filter
+    def get_availabilities(
+        self,
+        professional_id: UUID | None,
+        time_filter: TimeEnum,
+        availability_status: AvailabilityStatusEnum,
+    ):
+        availability_list = self.__repo.find_all_by_owner_id_status_and_time(
+            professional_id, availability_status, time_filter
         )
 
         if not availability_list:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No availabilities found for this professional_id.",
+                detail="No availabilities found.",
             )
 
-        return availability_list
+        return [AvailabilitiesResponse(a) for a in availability_list]
 
     def change_status(self, request: AvailabilitiesUpdateStatusRequest, owner_id):
+
         owner_user: User = self.__get_owner_data_by_id(owner_id)
 
         UserValidator.validate_user_professional(owner_user)
