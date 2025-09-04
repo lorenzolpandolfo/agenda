@@ -229,7 +229,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{api_url}}/user?user_id=f13ee927-601a-4b81-9def-e39b6dad5e45",
+					"raw": "{{api_url}}/user?user_id=553e4d70-dc69-43db-8c69-9ab8d947e9a2",
 					"host": [
 						"{{api_url}}"
 					],
@@ -239,7 +239,7 @@
 					"query": [
 						{
 							"key": "user_id",
-							"value": "f13ee927-601a-4b81-9def-e39b6dad5e45"
+							"value": "553e4d70-dc69-43db-8c69-9ab8d947e9a2"
 						}
 					]
 				}
@@ -361,6 +361,55 @@
 							"key": "time_filter",
 							"value": "ALL",
 							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users by role",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"lorenzo@gmail.com\",\n    \"password\": \"123123\",\n    \"name\": \"Lorenzo Pandolfo\",\n    // \"crp\":\"CRP/01-12345\",\n    \"bio\": \"Estudante de Programação\",\n    \"image_url\": \"link_para_imagem.jpeg\"\n}"
+				},
+				"url": {
+					"raw": "{{api_url}}/user/all?role=PROFESSIONAL&skip=0&limit=50",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"user",
+						"all"
+					],
+					"query": [
+						{
+							"key": "role",
+							"value": "PROFESSIONAL"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "50"
 						}
 					]
 				}

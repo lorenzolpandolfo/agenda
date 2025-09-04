@@ -113,6 +113,64 @@ Response **200**:
 
 ---
 
+### GET /user/all?role=*PROFESSIONAL,PATIENT&skip=0&limit=50 (params. opcional)*
+
+Retorna uma lista de usuários conforme o role especificado. Se não especificar, retorna todos. 
+Skip pula a quantidade especificada de usuários e limit limita a quantidade de usuários retornados.
+
+
+Response **200**:
+```json
+[
+    {
+        "user_id": "16ed380c-ac5c-4e9c-85f0-a890786b0af4",
+        "name": "Dr. Ana Silva",
+        "bio": null,
+        "email": "ana.silva@email.com",
+        "role": "PROFESSIONAL",
+        "status": "READY",
+        "crp": "CRP/01-12345",
+        "image_url": null,
+        "created_at": "2025-09-03 22:25:40.508305+00:00"
+    },
+    {
+        "user_id": "44370f25-a26b-4bf2-a152-b01c13990681",
+        "name": "Dr. Carlos Souza",
+        "bio": null,
+        "email": "carlos.souza@email.com",
+        "role": "PROFESSIONAL",
+        "status": "READY",
+        "crp": "CRP/02-54321",
+        "image_url": null,
+        "created_at": "2025-09-03 22:25:40.508305+00:00"
+    },
+    {
+        "user_id": "345f2314-d753-4bf0-8f10-20e905d723c4",
+        "name": "Beatriz Lima",
+        "bio": null,
+        "email": "beatriz.l@email.com",
+        "role": "PROFESSIONAL",
+        "status": "WAITING_VALIDATION",
+        "crp": "CRP/03-98765",
+        "image_url": null,
+        "created_at": "2025-09-03 22:25:40.508305+00:00"
+    },
+    {
+        "user_id": "d5d1b545-ee6e-4d94-bda0-6228abc94a85",
+        "name": "Gustavo Müller Ps",
+        "bio": "Um ps legal",
+        "email": "gustavops@gmail.com",
+        "role": "PROFESSIONAL",
+        "status": "WAITING_VALIDATION",
+        "crp": "CRP/01-12346",
+        "image_url": null,
+        "created_at": "2025-09-03 22:41:13.493211+00:00"
+    }
+]
+```
+
+---
+
 ### GET /user/verify-crp?user_id=*123 (param. opcional)*
 
 Valida o CRP de um usuário ***PROFESSIONAL***, alterando no usuário o atributo **status** para ***READY***.

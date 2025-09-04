@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Security
 from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.orm import Session
 
+from api.enum.user_roles_enum import UserRolesEnum
 from api.modules.db.db import get_db
 from api.modules.security.security_service import SecurityService
 from api.modules.user.request.user_login_request import UserLoginRequest
@@ -32,7 +33,7 @@ async def login(
     data: UserLoginRequest, service: UserService = Depends(get_user_service)
 ):
     user: User = service.login(data)
-    user_data_response = UserMapper.to_user_response_login(user)
+    user_data_response = UserMapper.to_user_response(user)
 
     tokens = get_security_service().auth(subject={"user_data": user_data_response})
 
@@ -63,7 +64,7 @@ async def register(
 
 
 @router.get("/verify-crp")
-async def verifiy_crp(
+async def verify_crp(
     user_id: UUID | None = None,
     service: UserService = Depends(get_user_service),
     credentials: JwtAuthorizationCredentials = Security(
@@ -99,3 +100,16 @@ async def get_user(
         "image_url": user.image_url,
         "created_at": user.created_at,
     }
+
+
+@router.get("/all")
+async def get_all_users(
+    role: UserRolesEnum | None = None,
+    skip: int | None = 0,
+    limit: int | None = 50,
+    service: UserService = Depends(get_user_service),
+    credentials: JwtAuthorizationCredentials = Security(
+        get_security_service().access_security
+    ),
+):
+    return service.get_all_users(role, skip, limit)

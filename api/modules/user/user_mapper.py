@@ -9,7 +9,7 @@ from api.modules.user.user_model import User
 class UserMapper:
 
     @staticmethod
-    def to_user_response_login(user: User) -> Dict[str, Any]:
+    def to_user_response(user: User) -> Dict[str, Any]:
         return {
             "user_id": str(user.id),
             "name": user.name,

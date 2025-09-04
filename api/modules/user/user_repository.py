@@ -10,8 +10,17 @@ class UserRepository:
     def find_by_id(self, user_id):
         return self.__db.query(User).filter(User.id == user_id).first()
 
-    def find_all(self):
-        return self.__db.query(User).all()
+    def find_all(self, skip=0, limit=50):
+        return self.__db.query(User).offset(skip).limit(limit).all()
+
+    def find_all_by_role(self, role_filter, skip=0, limit=50):
+        return (
+            self.__db.query(User)
+            .filter(User.role == str(role_filter))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
 
     def find_by_email(self, email):
         return self.__db.query(User).filter(User.email == email).first()

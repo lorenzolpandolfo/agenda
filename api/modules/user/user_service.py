@@ -24,9 +24,12 @@ class UserService:
 
     def get_user_data(self, user_id, credentials_subject):
         if not user_id:
-            return UserMapper.user_register_request_to_user(subject=credentials_subject)
+            user_id = credentials_subject.get("user_data").get("user_id")
 
-        return self.__repo.find_by_id(user_id)
+        user: User = self.__repo.find_by_id(user_id)
+
+        UserValidator.validate_user(user)
+        return user
 
     def login(self, data: UserLoginRequest) -> User | None:
         user = self.__repo.find_by_email(data.email)
@@ -65,3 +68,12 @@ class UserService:
         user_to_verify.status = str(UserStatusEnum.READY)
 
         return self.__repo.save(user_to_verify)
+
+    def get_all_users(self, role_filter, skip, limit):
+        if role_filter:
+            users = self.__repo.find_all_by_role(role_filter, skip, limit)
+
+        else:
+            users = self.__repo.find_all(skip, limit)
+
+        return [UserMapper.to_user_response(u) for u in users]
