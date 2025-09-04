@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from api.enum.user_status_enum import UserStatusEnum
 from api.modules.user.request.user_login_request import UserLoginRequest
 from api.modules.user.request.user_register_request import UserRegisterRequest
+from api.modules.user.request.user_update_request import UserUpdateRequest
 from api.modules.user.response.user_response import UserResponse
 from api.modules.user.user_mapper import UserMapper
 from api.modules.user.user_model import User
@@ -83,3 +84,19 @@ class UserService:
             users = self.__repo.find_all(skip, limit)
 
         return [UserMapper.to_user_response(u) for u in users]
+
+    def update_user(self, data: UserUpdateRequest, user_id):
+        user: User = self.__repo.find_by_id(user_id)
+
+        UserValidator.validate_user(user)
+
+        update_data = data.model_dump(exclude_unset=True)
+
+        if "password" in update_data:
+            user.password_hash = hash_password(update_data.pop("password"))
+
+        for field, value in update_data.items():
+            setattr(user, field, value)
+
+        user: User = self.__repo.save(user)
+        return UserMapper.to_user_response(user)

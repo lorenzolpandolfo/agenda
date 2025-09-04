@@ -41,9 +41,12 @@ Response **200**: ****
   "name": "Lorenzo Pandolfo",
   "bio": "Estudante de Programação",
   "email": "lorenzo@gmail.com",
-  "role": "PATIENT", // PROFESSIONAL caso tenha CRP
-  "status": "READY", // WAITING_VALIDATION caso tenha CRP
-  "crp": null, // caso CRP não seja especificado fica null
+  "role": "PATIENT",
+  // PROFESSIONAL caso tenha CRP
+  "status": "READY",
+  // WAITING_VALIDATION caso tenha CRP
+  "crp": null,
+  // caso CRP não seja especificado fica null
   "image_url": "link_para_imagem.jpeg",
   "created_at": "2025-09-03T00:15:42.600633+00:00"
 }
@@ -166,6 +169,44 @@ Response **200**:
 
 ---
 
+### POST /user/update
+
+Atualiza informações do usuário autenticado. Todos os campos do request são opcionais.
+
+Request:
+
+```json
+{
+  "name": "Lorenzo Pandolfo",
+  "bio": "Estudante de programação e interessado em tecnologia.",
+  "image_url": "link.jpg",
+  "password": "123123"
+}
+```
+
+Response **200**:
+
+```json
+{
+  "id": "553e4d70-dc69-43db-8c69-9ab8d947e9a2",
+  "name": "Lorenzo Pandolfo",
+  "bio": "Estudante de programação e interessado em tecnologia.",
+  "email": "lorenzo@gmail.com",
+  "role": "PATIENT",
+  "status": "READY",
+  "crp": null,
+  "image_url": "link.jpg",
+  "created_at": "2025-09-04T01:41:54.576826Z"
+}
+```
+
+Validações:
+
+- A senha, caso especificada, deve conter ao menos 6 caracteres.
+- O usuário deve estar logado
+
+---
+
 ### GET /user/verify-crp?user_id=*123 (param. opcional)*
 
 Valida o CRP de um usuário ***PROFESSIONAL***, alterando no usuário o atributo **status** para ***READY***.
@@ -242,9 +283,13 @@ validações:
 ### **GET /availabilities**
 
 **Path params:**
-- _**professional_id: UUID (opcional)**_: Consultar horários disponíveis de um usuário específico. Se não especificado, considera todos os usuários profissionais.
-- _**time_filter: DAY, WEEK, MONTH, ALL (opcional)**_: Consultar horários disponíveis em especificado período de tempo. Se não enviado, por padrão, filtra em _**WEEK**_.
-- _**status: AVAILABLE, TAKEN, COMPLETED, CANCELED (opcional)**_: Filtrar por status de horário. Se não especificado, cosidera _**AVAILABLE**_.
+
+- _**professional_id: UUID (opcional)**_: Consultar horários disponíveis de um usuário específico. Se não especificado,
+  considera todos os usuários profissionais.
+- _**time_filter: DAY, WEEK, MONTH, ALL (opcional)**_: Consultar horários disponíveis em especificado período de tempo.
+  Se não enviado, por padrão, filtra em _**WEEK**_.
+- _**status: AVAILABLE, TAKEN, COMPLETED, CANCELED (opcional)**_: Filtrar por status de horário. Se não especificado,
+  cosidera _**AVAILABLE**_.
 - _**skip: int (opcional)**_: Ignora os N primeiro elementos retornados.
 - _**limit: int (opcional)**_: Limita o número de elementos da lista (por padrão 50).
 
@@ -253,41 +298,41 @@ Response **200**:
 ```json
 [
   {
-        "id": "beac2b9f-e517-4cfc-9907-2cb8ac25f633",
-        "created_at": "2025-09-03T22:25:40.518858+00:00",
-        "status": "AVAILABLE",
-        "start_time": "2025-09-03T09:00:00+00:00",
-        "end_time": "2025-09-03T10:00:00+00:00",
-        "user": {
-            "id": "16ed380c-ac5c-4e9c-85f0-a890786b0af4",
-            "name": "Dr. Ana Silva",
-            "bio": null,
-            "email": "ana.silva@email.com",
-            "role": "PROFESSIONAL",
-            "status": "READY",
-            "crp": "CRP/01-12345",
-            "image_url": null,
-            "created_at": "2025-09-03T22:25:40.508305Z"
-        }
-    },
-    {
-        "id": "06b2a720-ca57-43bc-b08c-24164229aaab",
-        "created_at": "2025-09-03T22:25:40.521630+00:00",
-        "status": "AVAILABLE",
-        "start_time": "2025-09-02T08:00:00+00:00",
-        "end_time": "2025-09-02T09:00:00+00:00",
-        "user": {
-            "id": "44370f25-a26b-4bf2-a152-b01c13990681",
-            "name": "Dr. Carlos Souza",
-            "bio": null,
-            "email": "carlos.souza@email.com",
-            "role": "PROFESSIONAL",
-            "status": "READY",
-            "crp": "CRP/02-54321",
-            "image_url": null,
-            "created_at": "2025-09-03T22:25:40.508305Z"
-        }
+    "id": "beac2b9f-e517-4cfc-9907-2cb8ac25f633",
+    "created_at": "2025-09-03T22:25:40.518858+00:00",
+    "status": "AVAILABLE",
+    "start_time": "2025-09-03T09:00:00+00:00",
+    "end_time": "2025-09-03T10:00:00+00:00",
+    "user": {
+      "id": "16ed380c-ac5c-4e9c-85f0-a890786b0af4",
+      "name": "Dr. Ana Silva",
+      "bio": null,
+      "email": "ana.silva@email.com",
+      "role": "PROFESSIONAL",
+      "status": "READY",
+      "crp": "CRP/01-12345",
+      "image_url": null,
+      "created_at": "2025-09-03T22:25:40.508305Z"
     }
+  },
+  {
+    "id": "06b2a720-ca57-43bc-b08c-24164229aaab",
+    "created_at": "2025-09-03T22:25:40.521630+00:00",
+    "status": "AVAILABLE",
+    "start_time": "2025-09-02T08:00:00+00:00",
+    "end_time": "2025-09-02T09:00:00+00:00",
+    "user": {
+      "id": "44370f25-a26b-4bf2-a152-b01c13990681",
+      "name": "Dr. Carlos Souza",
+      "bio": null,
+      "email": "carlos.souza@email.com",
+      "role": "PROFESSIONAL",
+      "status": "READY",
+      "crp": "CRP/02-54321",
+      "image_url": null,
+      "created_at": "2025-09-03T22:25:40.508305Z"
+    }
+  }
 ]
 ```
 
@@ -306,8 +351,8 @@ Request:
 
 ```json
 {
-    "availability_id": "a5b386a7-724c-407a-b505-d606cc609124",
-    "status": "AVAILABLE"
+  "availability_id": "a5b386a7-724c-407a-b505-d606cc609124",
+  "status": "AVAILABLE"
 }
 ```
 
@@ -315,12 +360,12 @@ Response **200**:
 
 ```json
 {
-    "start_time": "2025-09-04T10:00:00+00:00",
-    "owner_id": "cc505260-5707-4a43-aeaa-2a8b11b651fd",
-    "id": "a5b386a7-724c-407a-b505-d606cc609124",
-    "end_time": "2025-09-04T11:00:00+00:00",
-    "created_at": "2025-09-04T18:54:49.522685+00:00",
-    "status": "AVAILABLE"
+  "start_time": "2025-09-04T10:00:00+00:00",
+  "owner_id": "cc505260-5707-4a43-aeaa-2a8b11b651fd",
+  "id": "a5b386a7-724c-407a-b505-d606cc609124",
+  "end_time": "2025-09-04T11:00:00+00:00",
+  "created_at": "2025-09-04T18:54:49.522685+00:00",
+  "status": "AVAILABLE"
 }
 ```
 

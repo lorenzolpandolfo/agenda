@@ -9,6 +9,7 @@ from api.modules.db.db import get_db
 from api.modules.security.security_service import SecurityService
 from api.modules.user.request.user_login_request import UserLoginRequest
 from api.modules.user.request.user_register_request import UserRegisterRequest
+from api.modules.user.request.user_update_request import UserUpdateRequest
 from api.modules.user.user_model import User
 from api.modules.user.user_service import UserService
 
@@ -84,3 +85,14 @@ async def get_all_users(
     ),
 ):
     return service.get_all_users(role, skip, limit)
+
+
+@router.post("/update")
+async def update_user(
+    data: UserUpdateRequest,
+    service: UserService = Depends(get_user_service),
+    credentials: JwtAuthorizationCredentials = Security(
+        get_security_service().access_security
+    ),
+):
+    return service.update_user(data, credentials.subject.get("user_id"))
