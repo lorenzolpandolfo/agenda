@@ -41,12 +41,9 @@ Response **200**: ****
   "name": "Lorenzo Pandolfo",
   "bio": "Estudante de Programação",
   "email": "lorenzo@gmail.com",
-  "role": "PATIENT",
-  // PROFESSIONAL caso tenha CRP
-  "status": "READY",
-  // WAITING_VALIDATION caso tenha CRP
-  "crp": null,
-  // caso CRP não seja especificado fica null
+  "role": "PATIENT", // PROFESSIONAL caso tenha CRP
+  "status": "READY", // WAITING_VALIDATION caso tenha CRP
+  "crp": null, // caso CRP não seja especificado fica null
   "image_url": "link_para_imagem.jpeg",
   "created_at": "2025-09-03T00:15:42.600633+00:00"
 }
@@ -227,8 +224,6 @@ Request:
 }
 ```
 
-*(atribui no servidor o owner_id ****com o id do usuário autenticado)*
-
 Response **200**:
 
 ```json
@@ -244,12 +239,14 @@ validações:
 
 ---
 
-### **GET /availabilities?professional_id=*id123&status=AVAILABLE&time_filter=DAY, WEEK, MONTH, ALL (params. opcionais)*
-**
+### **GET /availabilities**
 
-Retorna os horários disponíveis, em determinando período de tempo e status especificado, do usuário com role
-***PROFESSIONAL*** especificado no _**professional_id**_.
-Caso não especifique um _**professional_id**_, retorna de todos os profissionais cadastrados.
+**Path params:**
+- _**professional_id: UUID (opcional)**_: Consultar horários disponíveis de um usuário específico. Se não especificado, considera todos os usuários profissionais.
+- _**time_filter: DAY, WEEK, MONTH, ALL (opcional)**_: Consultar horários disponíveis em especificado período de tempo. Se não enviado, por padrão, filtra em _**WEEK**_.
+- _**status: AVAILABLE, TAKEN, COMPLETED, CANCELED (opcional)**_: Filtrar por status de horário. Se não especificado, cosidera _**AVAILABLE**_.
+- _**skip: int (opcional)**_: Ignora os N primeiro elementos retornados.
+- _**limit: int (opcional)**_: Limita o número de elementos da lista (por padrão 50).
 
 Response **200**:
 
@@ -296,10 +293,8 @@ Response **200**:
 
 Validações:
 
-- caso especificado, o _**professional_id**_ de um usuário profissional deve existir
-- usuário relacionado ao id deve ter role ***PROFESSIONAL***
-- status deve existir (AVAILABLE, TAKEN, COMPLETED, CANCELED)
-- se o _**time_filter**_ não for especificado, por padrão, retorna os horários na semana (WEEK)
+- Caso especificado, o _**professional_id**_ deve existir e ter role _**PROFESSIONAL**_
+- Status deve ser válido: (AVAILABLE, TAKEN, COMPLETED, CANCELED)
 
 ---
 
@@ -311,8 +306,8 @@ Request:
 
 ```json
 {
-  "availability_id": "da6f3bd2-c535-4a4c-840b-e2492e9fcb38",
-  "status": "AVAILABLE"
+    "availability_id": "a5b386a7-724c-407a-b505-d606cc609124",
+    "status": "AVAILABLE"
 }
 ```
 
@@ -320,18 +315,18 @@ Response **200**:
 
 ```json
 {
-  "start_time": "2025-09-04T10:00:00+00:00",
-  "created_at": "2025-09-03T00:31:40.899691+00:00",
-  "id": "819b036c-c9a7-4cc5-8146-cc91656042a5",
-  "end_time": "2025-09-04T11:00:00+00:00",
-  "owner_id": "3f4f15d1-a337-41b1-985d-677130b3bcb2",
-  "status": "AVAILABLE"
+    "start_time": "2025-09-04T10:00:00+00:00",
+    "owner_id": "cc505260-5707-4a43-aeaa-2a8b11b651fd",
+    "id": "a5b386a7-724c-407a-b505-d606cc609124",
+    "end_time": "2025-09-04T11:00:00+00:00",
+    "created_at": "2025-09-04T18:54:49.522685+00:00",
+    "status": "AVAILABLE"
 }
 ```
 
 Validações:
 
-- status deve ser **“AVAILABLE”, “TAKEN”, “COMPLETED” ou** **“CANCELED”**.
+- status deve ser válido: **AVAILABLE, TAKEN, COMPLETED ou CANCELED**.
 - usuário logado deve ter role ***PROFESSIONAL***
 - usuário deve ser o criador do horário (***owner_id*** do horário deve ser o mesmo do usuário)
 

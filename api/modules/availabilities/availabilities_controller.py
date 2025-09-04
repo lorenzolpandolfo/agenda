@@ -59,13 +59,15 @@ async def availabilities(
     professional_id: UUID | None = None,
     time_filter: TimeEnum | None = TimeEnum.WEEK,
     status: AvailabilityStatusEnum | None = AvailabilityStatusEnum.AVAILABLE,
+    skip: int | None = 0,
+    limit: int | None = 50,
     service: AvailabilitiesService = Depends(get_availabilities_service),
     credentials: JwtAuthorizationCredentials = Security(
         get_security_service().access_security
     ),
 ):
     availability_list: List[Availabilities] = service.get_availabilities(
-        professional_id, time_filter, status
+        professional_id, time_filter, status, skip, limit
     )
 
     return availability_list

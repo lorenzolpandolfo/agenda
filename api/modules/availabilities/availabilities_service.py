@@ -62,9 +62,11 @@ class AvailabilitiesService:
         professional_id: UUID | None,
         time_filter: TimeEnum,
         availability_status: AvailabilityStatusEnum,
+        skip: int,
+        limit: int,
     ):
         availability_list = self.__repo.find_all_by_owner_id_status_and_time(
-            professional_id, availability_status, time_filter
+            professional_id, availability_status, time_filter, skip, limit
         )
 
         if not availability_list:

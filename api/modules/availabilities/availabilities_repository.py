@@ -27,14 +27,15 @@ class AvailabilitiesRepository:
 
     def find_all_by_owner_id_status_and_time(
         self,
-        owner_id: UUID,
+        owner_id: UUID | None,
         availability_status: AvailabilityStatusEnum,
         time_filter: TimeEnum,
-    ) -> list[Availabilities] | None:
-
+        skip: int = 0,
+        limit: int = 10,
+    ) -> list[Availabilities]:
         query = self.__db.query(Availabilities)
 
-        if owner_id is not None:
+        if owner_id:
             query = query.filter(Availabilities.owner_id == owner_id)
 
         now = datetime.now()
@@ -58,12 +59,13 @@ class AvailabilitiesRepository:
 
         if start and end:
             query = query.filter(
-                Availabilities.start_time >= start, Availabilities.start_time < end
+                Availabilities.start_time >= start,
+                Availabilities.start_time < end,
             )
 
         query = query.filter(Availabilities.status == availability_status)
 
-        return query.all()
+        return query.offset(skip).limit(limit).all()
 
     def save(self, availability) -> Availabilities:
         self.__db.add(availability)

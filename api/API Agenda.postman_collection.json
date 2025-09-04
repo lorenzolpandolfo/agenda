@@ -287,7 +287,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{api_url}}/availabilities",
+							"raw": "{{api_url}}/availabilities?time_filter=DAY&status=AVAILABLE&skip=0&limit=50",
 							"host": [
 								"{{api_url}}"
 							],
@@ -302,13 +302,19 @@
 								},
 								{
 									"key": "time_filter",
-									"value": "DAY",
-									"disabled": true
+									"value": "DAY"
 								},
 								{
 									"key": "status",
-									"value": "AVAILABLE",
-									"disabled": true
+									"value": "AVAILABLE"
+								},
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "50"
 								}
 							]
 						}
