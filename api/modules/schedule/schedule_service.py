@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from uuid import UUID
 
 from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
@@ -16,8 +17,10 @@ from api.modules.schedule.request.schedule_create_request import ScheduleCreateR
 from api.modules.schedule.schedule_mapper import ScheduleMapper
 from api.modules.schedule.schedule_model import Schedule
 from api.modules.schedule.schedule_repository import ScheduleRepository
+from api.modules.schedule.schedule_validator import ScheduleValidator
 from api.modules.user.user_model import User
 from api.modules.user.user_repository import UserRepository
+from api.modules.user.user_validator import UserValidator
 
 
 class ScheduleService:
@@ -69,3 +72,19 @@ class ScheduleService:
         )
 
         return [ScheduleMapper.to_schedule_response(s) for s in schedule_list]
+
+    def delete_schedule(self, schedule_id: UUID, user_id: UUID):
+        schedule: Schedule = self.__repo.find_by_id(schedule_id)
+        user: User = self.__user_repo.find_by_id(user_id)
+        availability: Availabilities = schedule.availability
+
+        UserValidator.validate_user(user)
+        ScheduleValidator.validate_schedule(schedule)
+        ScheduleValidator.validate_delete_schedule(schedule, user)
+        AvailabilitiesValidator.validate_availability(availability)
+
+        if availability.status == AvailabilityStatusEnum.TAKEN:
+            availability.status = AvailabilityStatusEnum.AVAILABLE
+            self.__availabilities_repo.save(availability)
+
+        self.__repo.delete(schedule)
