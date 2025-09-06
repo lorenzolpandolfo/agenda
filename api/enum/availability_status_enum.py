@@ -1,7 +1,7 @@
-from enum import Enum
+from api.enum.serializable_enum import SerializableEnum
 
 
-class AvailabilityStatusEnum(Enum):
+class AvailabilityStatusEnum(SerializableEnum):
     AVAILABLE = "AVAILABLE"
     TAKEN = "TAKEN"
     COMPLETED = "COMPLETED"

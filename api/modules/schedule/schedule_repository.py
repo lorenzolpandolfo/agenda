@@ -26,6 +26,11 @@ class ScheduleRepository:
         self.__db.refresh(schedule)
         return schedule
 
+    def delete(self, schedule):
+        self.__db.delete(schedule)
+        self.__db.commit()
+
+
     def find_by_professional_id_or_patient_id_filter_by_time(
         self, professional_id: UUID, patient_id: UUID, time_filter: TimeEnum
     ) -> list[Schedule]:

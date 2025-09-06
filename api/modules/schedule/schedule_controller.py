@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, Security
 from fastapi_jwt import JwtAuthorizationCredentials
 from sqlalchemy.orm import Session
@@ -46,3 +48,13 @@ async def schedule(
     ),
 ):
     return service.get_schedules(time_filter, credentials.subject)
+
+@router.delete("", status_code=204)
+async def delete_schedule(
+        schedule_id: UUID,
+        service: ScheduleService = Depends(get_schedule_service),
+        credentials: JwtAuthorizationCredentials = Security(
+            get_security_service().access_security
+        )
+):
+    service.delete_schedule(schedule_id, credentials.subject.get("user_id"))
