@@ -86,7 +86,7 @@ Response **200**:
 
 ---
 
-### **GET /user?user_id=*123 (param. opcional)***
+### **GET /user?user_id=*UUID (param. opcional)***
 
 Retorna informações básicas sobre usuário pelo id.
 
@@ -207,7 +207,7 @@ Validações:
 
 ---
 
-### GET /user/verify-crp?user_id=*123 (param. opcional)*
+### GET /user/verify-crp?user_id=*UUID (param. opcional)*
 
 Valida o CRP de um usuário ***PROFESSIONAL***, alterando no usuário o atributo **status** para ***READY***.
 
@@ -462,3 +462,14 @@ Response **200**:
   }
 ]
 ```
+
+---
+
+### DELETE /schedule?schedule_id=UUID
+Remove um agendamento.
+
+Response: **204 No Content**
+
+Validações:
+- Utilizado apenas por usuário _**PATIENT**_
+- Usuário autenticado deve ser o dono do agendamento
